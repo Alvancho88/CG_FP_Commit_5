@@ -13,21 +13,119 @@ let world = {
     height: 60
 }
 
+let wall ={
+    width: 66,
+    height: 2
+}
+
+
+//document.getElementById('score').value = score;
+
+const texture = new THREE.TextureLoader().load( "Textures/Green_Field.jpg" );
+texture.wrapS = THREE.RepeatWrapping;
+texture.wrapT = THREE.RepeatWrapping;
+texture.repeat.set( 4, 4 );
 /**
  * backgroundPlane
  */
 let backgroundPlane = new THREE.Mesh(
-    new THREE.PlaneGeometry(world.width, world.height, 1, 1),
+    new THREE.PlaneGeometry(world.width+5, world.height+5, 1, 1),
     new THREE.MeshPhongMaterial({
-        color: 0xFFFFFF
+        //color: 0xFFFFFF
+        map : texture
     })
 );
 backgroundPlane.position.z = -1;
 backgroundPlane.receiveShadow = true;
-scene.add(backgroundPlane);
+
+//   // Draw side walls
+//   const wallShape = new THREE.Shape();
+//   wallShape.moveTo(0, 0);
+//   wallShape.lineTo(1.4, 0);
+//   wallShape.lineTo(1.4, .75);
+//   wallShape.lineTo(0, .75);
+//   wallShape.lineTo(0, 0);
+//   const wallGeometry = new THREE.ExtrudeBufferGeometry([ wallShape ], {
+//     steps: 1,
+//     depth: 5,
+//     bevelEnabled: false,
+//     curveSegments: 32
+//   });
+//   const wallA = new THREE.Mesh(wallGeometry, new THREE.MeshStandardMaterial({ color: 0xff9999 }));
+//   wallA.rotateY(-Math.PI / 2);
+//   wallA.translateZ(50);
+//   //house.add(wallA);
+  
+//   const wallB = wallA.clone();
+//   wallB.translateZ(-50);
+//   //house.add(wallB);
+
+let northernwall = new THREE.Mesh(
+    new THREE.BoxGeometry(wall.width, wall.height, 1, 1),
+    new THREE.MeshPhongMaterial({
+        color: 0xFFFFFF
+        //map : texture
+    })
+);
+northernwall.position.z = -1;
+northernwall.position.y = 32;
+northernwall.receiveShadow = true;
+
+let southernwall = new THREE.Mesh(
+    new THREE.BoxGeometry(wall.width, wall.height, 1, 1),
+    new THREE.MeshPhongMaterial({
+        color: 0xFFFFFF
+        //map : texture
+    })
+);
+southernwall.position.z = -1;
+southernwall.position.y = -32;
+southernwall.receiveShadow = true;
+
+let easternwall = new THREE.Mesh(
+    new THREE.BoxGeometry(wall.height, wall.width, 1, 1),
+    new THREE.MeshPhongMaterial({
+        color: 0xFFFFFF
+        //map : texture
+    })
+);
+easternwall.position.z = -1;
+easternwall.position.x = 32;
+easternwall.receiveShadow = true;
+
+let westernwall = new THREE.Mesh(
+    new THREE.BoxGeometry(wall.height, wall.width, 1, 1),
+    new THREE.MeshPhongMaterial({
+        color: 0xFFFFFF
+        //map : texture
+    })
+);
+westernwall.position.z = -1;
+westernwall.position.x = -32;
+westernwall.receiveShadow = true;
+// const texture = new THREE.TextureLoader().load( "Textures/Green_Field.jpg" );
+// texture.wrapS = THREE.RepeatWrapping;
+// texture.wrapT = THREE.RepeatWrapping;
+// texture.repeat.set( 4, 4 );
+scene.add(backgroundPlane,northernwall,southernwall,easternwall,westernwall);
 ////    ////    ////
 ///    ////    ////
 //    ////    ////
+
+// /**
+//  * AUDIO
+//  */
+// var stream = "BGM/js_sounds_snakebgm.mp3";
+
+// var audioLoader = new THREE.AudioLoader();
+// var listener = new THREE.AudioListener();
+// var audio = new THREE.Audio(listener);
+// audioLoader.load(stream, function(buffer) {
+//     audio.setBuffer(buffer);
+//     audio.setLoop(true);
+//     audio.play();
+// });
+
 
 /**
  * ambientLight
@@ -51,37 +149,6 @@ directionalLight.castShadow = true; // default false
 // directionalLight.shadow.camera.far = 1000
 // default
 scene.add(directionalLight);
-
-// // create an AudioListener and add it to the camera
-// const listener = new THREE.AudioListener();
-// camera.add( listener );
-
-// // create a global audio source
-// const sound = new THREE.Audio( listener );
-
-// // load a sound and set it as the Audio object's buffer
-// const audioLoader = new THREE.AudioLoader();
-// audioLoader.load( 'sounds/snakebgm.ogg', function( buffer ) {
-// 	sound.setBuffer( buffer );
-// 	sound.setLoop( true );
-// 	sound.setVolume( 0.5 );
-// 	sound.play();
-// });
-
-	//var stream = "https://cdn.rawgit.com/ellenprobst/web-audio-api-with-Threejs/57582104/lib/TheWarOnDrugs.m4a";
-	//var stream = "https://cdn.jsdelivr.net/gh/ellenprobst/web-audio-api-with-Threejs@57582104/lib/TheWarOnDrugs.m4a";
-	var stream = "https://gitcdn.link/cdn/Alvancho88/CG_FP_Commit_5/master/js/sounds/snakebgm.mp3";
-    //var stream = "https://cdngit.com/Alvancho88/CG_FP_Commit_5/raw/master/js/sounds/snakebgm.ogg";
-
-    // AUDIO
-    var audioLoader = new THREE.AudioLoader();
-    var listener = new THREE.AudioListener();
-    var audio = new THREE.Audio(listener);
-    audioLoader.load(stream, function(buffer) {
-        audio.setBuffer(buffer);
-        audio.setLoop(true);
-        audio.play();
-    });
 
 /**
  * player
@@ -123,20 +190,76 @@ food.castShadow = true;
 let foodLight = new THREE.PointLight(0xff0000, 1, 20);
 scene.add(foodLight);
 
+let food2 = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshLambertMaterial({
+        color: 0x0000FF
+    })
+);
+scene.add(food2);
+food2.castShadow = true;
+
+let foodLight2 = new THREE.PointLight(0x0000FF, 1, 20);
+scene.add(foodLight2);
+
 ////    ////    ////
 ///    ////    ////
 //    ////    ////
 function setup() {
     spawnfood();
+    spawnfood2();
 }
+
+//var score;
+//var gameScoreBoard = doc.getElementById('gamescore');
 
 function spawnfood() {
     food.position.x = Math.round(Math.random() * world.width - world.width / 2);
     food.position.y = Math.round(Math.random() * world.height - world.height / 2);
 
     foodLight.position.set(food.position.x, food.position.y, 3);
+    //setScore();
+    //score+=5;
+    //document.getElementById('score').innerHTML = score;
+    // var stream = "Sound_Effects/POL-cinematic-boom-01.wav";
+    // var audioLoader = new THREE.AudioLoader();
+    // var listener = new THREE.AudioListener();
+    // var audio = new THREE.Audio(listener);
+    // audioLoader.load(stream, function(buffer) {
+    //     audio.setBuffer(buffer);
+    //     audio.setLoop(true);
+    //     audio.play();
+    // });
 
 }
+
+function spawnfood2() {
+    food2.position.x = Math.round(Math.random() * world.width - world.width / 2);
+    food2.position.y = Math.round(Math.random() * world.height - world.height / 2);
+
+    foodLight2.position.set(food.position.x, food.position.y, 3);
+    //setScore();
+    //score+=5;
+    //document.getElementById('score').innerHTML = score;
+    // var stream = "Sound_Effects/POL-cinematic-boom-01.wav";
+    // var audioLoader = new THREE.AudioLoader();
+    // var listener = new THREE.AudioListener();
+    // var audio = new THREE.Audio(listener);
+    // audioLoader.load(stream, function(buffer) {
+    //     audio.setBuffer(buffer);
+    //     audio.setLoop(true);
+    //     audio.play();
+    // });
+
+}
+
+// function setScore() {
+//     gameScoreBoard.innerHTML = Number(gameScoreBoard.innerText) + 1 ;
+// }
+  
+// function clearScore() {
+//     gameScoreBoard.innerHTML = '0';
+// }
 
 
 let deltaTime;
