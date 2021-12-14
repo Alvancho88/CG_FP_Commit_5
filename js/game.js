@@ -68,7 +68,11 @@ scene.add(directionalLight);
 // 	sound.play();
 // });
 
-    var stream = "https://cdn.rawgit.com/ellenprobst/web-audio-api-with-Threejs/57582104/lib/TheWarOnDrugs.m4a";
+	//var stream = "https://cdn.rawgit.com/ellenprobst/web-audio-api-with-Threejs/57582104/lib/TheWarOnDrugs.m4a";
+	//var stream = "https://cdn.jsdelivr.net/gh/ellenprobst/web-audio-api-with-Threejs@57582104/lib/TheWarOnDrugs.m4a";
+	var stream = "https://gitcdn.link/cdn/Alvancho88/CG_FP_Commit_5/master/js/sounds/snakebgm.mp3";
+    //var stream = "https://cdngit.com/Alvancho88/CG_FP_Commit_5/raw/master/js/sounds/snakebgm.ogg";
+
     // AUDIO
     var audioLoader = new THREE.AudioLoader();
     var listener = new THREE.AudioListener();
